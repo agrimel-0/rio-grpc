@@ -2,7 +2,7 @@ syntax = "proto3";
 
 option go_package = "github.com/agrimel-0/rio-grpc";
 
-package rio_grpc;
+package riogrpc;
 
 service Rio {
     rpc SetGPIObyOffset (GPIOselected) returns (ServerResponse) {}

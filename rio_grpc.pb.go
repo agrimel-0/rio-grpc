@@ -4,7 +4,7 @@
 // - protoc             v3.20.1
 // source: rio.proto
 
-package rio_grpc
+package riogrpc
 
 import (
 	context "context"
@@ -36,7 +36,7 @@ func NewRioClient(cc grpc.ClientConnInterface) RioClient {
 
 func (c *rioClient) SetGPIObyOffset(ctx context.Context, in *GPIOselected, opts ...grpc.CallOption) (*ServerResponse, error) {
 	out := new(ServerResponse)
-	err := c.cc.Invoke(ctx, "/rio_grpc.Rio/SetGPIObyOffset", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/riogrpc.Rio/SetGPIObyOffset", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (c *rioClient) SetGPIObyOffset(ctx context.Context, in *GPIOselected, opts 
 
 func (c *rioClient) SetGPIObyAlias(ctx context.Context, in *GPIOselected, opts ...grpc.CallOption) (*ServerResponse, error) {
 	out := new(ServerResponse)
-	err := c.cc.Invoke(ctx, "/rio_grpc.Rio/SetGPIObyAlias", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/riogrpc.Rio/SetGPIObyAlias", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -94,7 +94,7 @@ func _Rio_SetGPIObyOffset_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rio_grpc.Rio/SetGPIObyOffset",
+		FullMethod: "/riogrpc.Rio/SetGPIObyOffset",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RioServer).SetGPIObyOffset(ctx, req.(*GPIOselected))
@@ -112,7 +112,7 @@ func _Rio_SetGPIObyAlias_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/rio_grpc.Rio/SetGPIObyAlias",
+		FullMethod: "/riogrpc.Rio/SetGPIObyAlias",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(RioServer).SetGPIObyAlias(ctx, req.(*GPIOselected))
@@ -124,7 +124,7 @@ func _Rio_SetGPIObyAlias_Handler(srv interface{}, ctx context.Context, dec func(
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Rio_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "rio_grpc.Rio",
+	ServiceName: "riogrpc.Rio",
 	HandlerType: (*RioServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
