@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-option go_package = "192.168.1.153/blue-box/blueboxproto";
+option go_package = "github.com/agrimel-0/rio-grpc";
 
-package bbs;
+package rio_grpc;
 
-service BlueBox {
+service Rio {
     rpc SetGPIObyOffset (GPIOselected) returns (ServerResponse) {}
     rpc SetGPIObyAlias (GPIOselected) returns (ServerResponse) {}
 }
@@ -17,5 +17,5 @@ message GPIOselected {
 
 
 message ServerResponse {
-    string ErrorString = 1;
+    string ResponseString = 1;
 }
