@@ -1,4 +1,4 @@
-module github.com/agrimel-0/rio-grpc/golang
+module github.com/agrimel-0/rio-grpc
 
 go 1.18
 
