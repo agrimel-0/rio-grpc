@@ -4,7 +4,7 @@
 // 	protoc        v3.20.1
 // source: rio.proto
 
-package riogrpc
+package rio_grpc
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
