@@ -24,6 +24,7 @@ const _ = grpc.SupportPackageIsVersion7
 type RioClient interface {
 	SetGPIObyOffset(ctx context.Context, in *GPIOselected, opts ...grpc.CallOption) (*ServerResponse, error)
 	SetGPIObyAlias(ctx context.Context, in *GPIOselected, opts ...grpc.CallOption) (*ServerResponse, error)
+	GetGPIOList(ctx context.Context, in *ClientRequest, opts ...grpc.CallOption) (Rio_GetGPIOListClient, error)
 }
 
 type rioClient struct {
@@ -52,12 +53,45 @@ func (c *rioClient) SetGPIObyAlias(ctx context.Context, in *GPIOselected, opts .
 	return out, nil
 }
 
+func (c *rioClient) GetGPIOList(ctx context.Context, in *ClientRequest, opts ...grpc.CallOption) (Rio_GetGPIOListClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Rio_ServiceDesc.Streams[0], "/riogrpc.Rio/GetGPIOList", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &rioGetGPIOListClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Rio_GetGPIOListClient interface {
+	Recv() (*GPIOselected, error)
+	grpc.ClientStream
+}
+
+type rioGetGPIOListClient struct {
+	grpc.ClientStream
+}
+
+func (x *rioGetGPIOListClient) Recv() (*GPIOselected, error) {
+	m := new(GPIOselected)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // RioServer is the server API for Rio service.
 // All implementations must embed UnimplementedRioServer
 // for forward compatibility
 type RioServer interface {
 	SetGPIObyOffset(context.Context, *GPIOselected) (*ServerResponse, error)
 	SetGPIObyAlias(context.Context, *GPIOselected) (*ServerResponse, error)
+	GetGPIOList(*ClientRequest, Rio_GetGPIOListServer) error
 	mustEmbedUnimplementedRioServer()
 }
 
@@ -70,6 +104,9 @@ func (UnimplementedRioServer) SetGPIObyOffset(context.Context, *GPIOselected) (*
 }
 func (UnimplementedRioServer) SetGPIObyAlias(context.Context, *GPIOselected) (*ServerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SetGPIObyAlias not implemented")
+}
+func (UnimplementedRioServer) GetGPIOList(*ClientRequest, Rio_GetGPIOListServer) error {
+	return status.Errorf(codes.Unimplemented, "method GetGPIOList not implemented")
 }
 func (UnimplementedRioServer) mustEmbedUnimplementedRioServer() {}
 
@@ -120,6 +157,27 @@ func _Rio_SetGPIObyAlias_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Rio_GetGPIOList_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(ClientRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(RioServer).GetGPIOList(m, &rioGetGPIOListServer{stream})
+}
+
+type Rio_GetGPIOListServer interface {
+	Send(*GPIOselected) error
+	grpc.ServerStream
+}
+
+type rioGetGPIOListServer struct {
+	grpc.ServerStream
+}
+
+func (x *rioGetGPIOListServer) Send(m *GPIOselected) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // Rio_ServiceDesc is the grpc.ServiceDesc for Rio service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -136,6 +194,12 @@ var Rio_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Rio_SetGPIObyAlias_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GetGPIOList",
+			Handler:       _Rio_GetGPIOList_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "rio.proto",
 }
