@@ -7,15 +7,22 @@ package riogrpc;
 service Rio {
     rpc SetGPIObyOffset (GPIOselected) returns (ServerResponse) {}
     rpc SetGPIObyAlias (GPIOselected) returns (ServerResponse) {}
+    rpc GetGPIOList (ClientRequest) returns (stream GPIOselected) {}
 }
 
 message GPIOselected {
     int32 GPIOLineOffset = 1;
     int32 GPIOLineValue = 2;
     string GPIOLineAlias = 3;
+    bool GPIOOutput = 4;
+    string GPIOChip = 5;
 }
 
 
 message ServerResponse {
     string ResponseString = 1;
+}
+
+message ClientRequest {
+    string RequestString = 1;
 }
