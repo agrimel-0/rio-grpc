@@ -1,6 +1,6 @@
 module github.com/agrimel-0/rio-grpc
 
-go 1.18
+go 1.19
 
 require (
 	google.golang.org/grpc v1.45.0
@@ -13,5 +13,4 @@ require (
 	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd // indirect
 	golang.org/x/text v0.3.0 // indirect
 	google.golang.org/genproto v0.0.0-20200526211855-cb27e3aa2013 // indirect
-	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.2.0 // indirect
 )
